@@ -2,14 +2,29 @@
 {{if .Success}}
 	<h1>Thanks for your message!</h1>
 {{else}}
-	<h1>Contact</h1>
+<html>
+<head>
+  <title>RedHat Forum Istio Demo</title>
+  <style>
+    body {
+      text-align: center;
+    }
+    input {
+      margin: 10px;
+      border: 1px solid #acacac;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>RedHat ISTIO Demo</h1>
+	<h2>Populate DB</h2>
 	<form method="POST">
-		<label>Email:</label><br />
-		<input type="text" name="email"><br />
-		<label>Subject:</label><br />
-		<input type="text" name="subject"><br />
-		<label>Message:</label><br />
-		<textarea name="message"></textarea><br />
+		<label>File to populate database:</label><br />
+		<input type="file" name="uploadFile"><br />
 		<input type="submit">
 	</form>
+</body>
 {{end}}

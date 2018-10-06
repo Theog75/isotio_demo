@@ -7,4 +7,10 @@ scratch is empty, so there are no libraries and no loadpath for it to look in. W
 
 before running again after you change the containers run:
 docker-compose.exe  down --rmi all
+
+or
+
+docker rm $(docker ps -a -q)
+ docker image rm $(docker image ls -q)
+
 To remove old images from cache
