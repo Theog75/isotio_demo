@@ -14,12 +14,21 @@
       padding: 10px;
       border-radius: 5px;
     }
+
+    .backlink {
+      disaply: block;
+      margin: 10px auto;
+      clear: both;
+    }
   </style>
 </head>
 <body>
 	<h1>Uploading file</h1>
+  <div>
+  <h2>Files in container</h1>  
   {{ .FilesList }}
-  <a href="/">back</a>
+  </div>
+  <a class='backlink' href="/">back</a>
 </body>
 </html>
 {{else}}

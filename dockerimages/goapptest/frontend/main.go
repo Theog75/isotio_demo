@@ -12,11 +12,8 @@ import (
 )
 
 type Fileupload struct {
-	Success bool
-}
-
-type FileList struct {
-	filename string
+	Success   bool
+	FilesList []string
 }
 
 func main() {
@@ -50,9 +47,13 @@ func main() {
 			var filedata []string
 
 			filedata = FilesList()
-
-			filestatus := Fileupload{true}
-			tmpl.Execute(w, filestatus)
+			fmt.Printf("%v", filedata)
+			dt := Fileupload{
+				Success:   true,
+				FilesList: filedata,
+			}
+			// filestatus := Fileupload{true, filedata}
+			tmpl.Execute(w, dt)
 		}
 	})
 
