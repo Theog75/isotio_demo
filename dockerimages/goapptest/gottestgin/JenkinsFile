@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Get Sources') {
+            steps {
+                git url: "http://gitlab.rct.co.il/root/mytests.git", credentialsId: "352a4e7d-887f-49b3-8a48-053214cd97e6", branch: "master"
+            }
+        }
+
+        stage('Go Build') {
+            steps {
+              sh('ls -l')
+              sh('cd gobuild && /opt/go/bin/go  build main.go')
+            }
+        }
+
+        stage('Pack In Docker') {
+            steps {
+              sh('cd gobuild && docker build -t hellogotest .')
+              // sh('cd gobuild && /opt/go/bin/go  build main.go')
+            }
+        }
+
+        // stage('deploy to openshift') {
+        //   steps {
+        //     withCredentials([usernamePassword(credentialsId: 'openshiftadmin', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+        //       sh 'echo $PASSWORD'
+        //       sh ' /usr/local/bin/oc login -u$USERNAME -p$PASSWORD'
+        //     //   sh '/usr/local/bin/oc delete project hello-openshift-project'
+        //       sh '/usr/local/bin/oc apply -f hello-openshift/hello-project.json'
+        //       sh '/usr/local/bin/oc project hello-openshift-project'
+        //       sh '/usr/local/bin/oc apply -f hello-openshift/hello-pod.json'
+        //     }
+        //
+        //   }
+        // }
+
+
+      }
+}
