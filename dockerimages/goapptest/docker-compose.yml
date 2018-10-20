@@ -1,26 +1,26 @@
 version: '3'
 services:
-  gotest:
-    build:
-      context: .
-      # DOC comment the following line and uncomment the next to run in a different base container
-      # dockerfile: DockerfileScratch
-      dockerfile: gottestgin/Dockerfile
-    ports:
-     - "8090:8080"
+  # gotest:
+  #   build:
+  #     context: .
+  #     # DOC comment the following line and uncomment the next to run in a different base container
+  #     # dockerfile: DockerfileScratch
+  #     dockerfile: gottestgin/Dockerfile
+  #   ports:
+  #    - "8090:8080"
   frontend:
     build:
-      context: .
+      context: ./frontend
       # DOC comment the following line and uncomment the next to run in a different base container
       # dockerfile: DockerfileScratch
-      dockerfile: frontend/Dockerfile
+      dockerfile: Dockerfile
     ports:
       - "8092:8088"
-  # langdb:
-  #   image: mongo
-  #   restart: always
-  #   ports:
-  #     - 8084:8081
-  #   environment:
-  #     ME_CONFIG_MONGODB_ADMINUSERNAME: redhat
-  #     ME_CONFIG_MONGODB_ADMINPASSWORD: lirancohen
+  langdb:
+    image: mongo
+    restart: always
+    ports:
+      - 8084:27017
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: redhat
+      ME_CONFIG_MONGODB_ADMINPASSWORD: lirancohen

@@ -1,3 +1,3 @@
 FROM scratch
-ADD  gottestgin/main /
+ADD  frontend/main /
 CMD ["/main"]

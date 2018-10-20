@@ -1,4 +1,4 @@
 FROM scratch
-ADD  frontend/main /
-ADD  frontend/upload.html /
+ADD  main /
+ADD  upload.html /
 CMD ["/main"]
