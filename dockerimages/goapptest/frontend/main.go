@@ -24,6 +24,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			tmpl.Execute(w, nil)
+			fmt.Println("file upload ok")
 			return
 		} else {
 			fmt.Println("method:", r.Method)
@@ -31,14 +32,14 @@ func main() {
 			r.ParseMultipartForm(32 << 20)
 			file, handler, err := r.FormFile("uploadFile")
 			if err != nil {
-				// fmt.Println(err)
+				fmt.Println(err)
 				return
 			}
 			defer file.Close()
 			// fmt.Fprintf(w, "%v", handler.Header)
 			f, err := os.OpenFile("./"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 			if err != nil {
-				// fmt.Println(err)
+				fmt.Println(err)
 				return
 			}
 			defer f.Close()
