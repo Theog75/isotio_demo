@@ -14,7 +14,7 @@ type Person struct {
 }
 
 func main() {
-	session, err := mgo.Dial("istiodemo_langdb_1:8084")
+	session, err := mgo.Dial("langdb:27017")
 	if err != nil {
 		panic(err)
 	}
@@ -23,7 +23,7 @@ func main() {
 	// Optional. Switch the session to a monotonic behavior.
 	session.SetMode(mgo.Monotonic, true)
 
-	c := session.DB("test").C("people")
+	c := session.DB("peopletest").C("people")
 	err = c.Insert(&Person{"Ale", "+55 53 8116 9639"},
 		&Person{"Cla", "+55 53 8402 8510"})
 	if err != nil {
