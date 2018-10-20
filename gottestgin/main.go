@@ -6,6 +6,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type ExampleResp struct {
+	Success bool   `json:"success"`
+	Data    string `json:"data"`
+}
+
+type User struct {
+	Title string `json:"title"`
+}
+
 type transformedTodo struct {
 	ID        uint   `json:"id"`
 	Title     string `json:"title"`
@@ -31,8 +40,17 @@ func initializeProcess(c *gin.Context) {
 }
 
 func populateDB(c *gin.Context) {
-	todo := controlSignal{Signal: "Populate DB", State: true}
-	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": todo})
+	var u User
+	c.BindJSON(&u)
+	// resp := ExampleResp{
+	// 	Success: true,
+	// 	Data:    "ssdfsd",
+	// }
+	// c.JSON(200, u.Title)
+	c.JSON(http.StatusOK, gin.H{
+		"title": u.Title,
+	})
+
 }
 
 func drawForm(c *gin.Context) {
@@ -50,10 +68,10 @@ func main() {
 		// v1.POST("/", createTodo)
 		v1.GET("/", fetchAllTodo)
 		v1.GET("/init", initializeProcess)
-		v1.GET("/populate", populateDB)
+		v1.POST("/populate", populateDB)
 		// v1.GET("/:id", fetchSingleTodo)
 		// v1.PUT("/:id", updateTodo)
 		// v1.DELETE("/:id", deleteTodo)
 	}
-	router.Run()
+	router.Run(":9000")
 }
