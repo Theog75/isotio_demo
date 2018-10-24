@@ -2,6 +2,8 @@
 package main
 
 import (
+	"bufio"
+	"encoding/csv"
 	"fmt"
 	"html/template"
 	"io"
@@ -9,6 +11,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 )
 
 type Fileupload struct {
@@ -47,7 +50,7 @@ func main() {
 
 			var filedata []string
 
-			filedata = FilesList()
+			filedata = filesList()
 			fmt.Printf("%v", filedata)
 			dt := Fileupload{
 				Success:   true,
@@ -55,13 +58,16 @@ func main() {
 			}
 			// filestatus := Fileupload{true, filedata}
 			tmpl.Execute(w, dt)
+			fmt.Println(handler.Filename)
+			readUploadedFile(handler.Filename)
+
 		}
 	})
 
 	http.ListenAndServe(":8088", nil)
 }
 
-func FilesList() []string {
+func filesList() []string {
 	var fileList []string
 	files, err := ioutil.ReadDir("./")
 	if err != nil {
@@ -72,4 +78,54 @@ func FilesList() []string {
 		fileList = append(fileList, f.Name())
 	}
 	return fileList
+}
+
+func readUploadedFile(filename string) {
+	fmt.Println("Reading file" + filename)
+	file, err := os.Open("/" + filename)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	// scanner := bufio.NewScanner(file)
+	// for scanner.Scan() {
+	// 	fmt.Println(scanner.Text())
+	// }
+	//
+	// if err := scanner.Err(); err != nil {
+	// 	log.Fatal(err)
+	// }
+
+	reader := csv.NewReader(file)
+	reader.Comma = '\t'
+	reader.FieldsPerRecord = -1
+
+	// csvData, err := reader.ReadAll()
+	// var tsvlines []string
+	// var tsvline string
+
+	// fmt.Println()reflect.TypeOf("%T", csvData)
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
+	scanner := bufio.NewScanner(file)
+	// scanner.Split(bufio.ScanLines)
+
+	for scanner.Scan() {
+		s := strings.Split(scanner.Text(), "\t")
+		fmt.Println(s[1] + " " + s[2])
+	}
+
+	// for _, each := range csvData {
+	// s := strings.Split(each, "\t")
+	// fmt.Print(each)
+	// fmt.Println(reflect.TypeOf(each))
+	// tsvlines = append(tsvlines, each...)
+	// fmt.Print(tsvlines[0] + " " + tsvlines[1])
+	// }
+	// jsonData, err := json.Marshal(tsvline)
 }
