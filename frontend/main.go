@@ -27,11 +27,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			tmpl.Execute(w, nil)
-<<<<<<< HEAD:dockerimages/goapptest/frontend/main.go
 			fmt.Println("file upload ok")
-=======
-			fmt.Println("Present form")
->>>>>>> 1eda71df4baa9582e36a61bc4d66ca9133521953:frontend/main.go
 			return
 		} else {
 			fmt.Println("method:", r.Method)
@@ -39,22 +35,14 @@ func main() {
 			r.ParseMultipartForm(2000 << 20)
 			file, handler, err := r.FormFile("uploadFile")
 			if err != nil {
-<<<<<<< HEAD:dockerimages/goapptest/frontend/main.go
 				fmt.Println(err)
-=======
-				fmt.Println("Got File", err)
->>>>>>> 1eda71df4baa9582e36a61bc4d66ca9133521953:frontend/main.go
 				return
 			}
 			defer file.Close()
 			// fmt.Fprintf(w, "%v", handler.Header)
 			f, err := os.OpenFile("./"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
 			if err != nil {
-<<<<<<< HEAD:dockerimages/goapptest/frontend/main.go
-				fmt.Println(err)
-=======
 				fmt.Println("Error opening file:", handler.Filename, err)
->>>>>>> 1eda71df4baa9582e36a61bc4d66ca9133521953:frontend/main.go
 				return
 			}
 			defer f.Close()
