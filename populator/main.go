@@ -52,7 +52,7 @@ func populatetitlesDB(c *gin.Context) {
 	// Optional. Switch the session to a monotonic behavior.
 	session.SetMode(mgo.Monotonic, true)
 
-	updatemongo := session.DB("imdb").C(titleline.Collection)
+	updatemongo := session.DB(os.Getenv("MONGO_DATABASE")).C(titleline.Collection)
 	err = updatemongo.Insert(&Titlesmongo{titleline.Titleid, titleline.Ordering, titleline.Title, titleline.Region, titleline.Language, titleline.Types, titleline.Attibutes, titleline.IsOriginalTitle})
 	if err != nil {
 		log.Fatal(err)

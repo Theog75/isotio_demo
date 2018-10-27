@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - MONGO_URL=http://langdb:27017
+      - MONGO_DATABASE=imdb
     ports:
       - "8088"
     networks:
