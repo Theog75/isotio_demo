@@ -44,6 +44,13 @@ func main() {
 				fmt.Println(err)
 				return
 			}
+
+			collection := r.FormValue("collection")
+			if err != nil {
+				fmt.Println(err)
+				return
+			}
+
 			defer file.Close()
 			// fmt.Fprintf(w, "%v", handler.Header)
 			f, err := os.OpenFile("./"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
@@ -65,7 +72,7 @@ func main() {
 			// filestatus := Fileupload{true, filedata}
 			tmpl.Execute(w, dt)
 			fmt.Println(handler.Filename)
-			readUploadedFile(handler.Filename)
+			readUploadedFile(handler.Filename, collection)
 
 		}
 	})
@@ -100,7 +107,7 @@ func filesList() []string {
 	return fileList
 }
 
-func readUploadedFile(filename string) {
+func readUploadedFile(filename string, collection string) {
 	fmt.Println("Reading file" + filename)
 	file, err := os.Open("/" + filename)
 
@@ -137,7 +144,8 @@ func readUploadedFile(filename string) {
 
 	for scanner.Scan() {
 		s := strings.Split(scanner.Text(), "\t")
-		fmt.Println(s[1] + " " + s[2])
+
+		sendDataToMongo(s, collection)
 	}
 
 	// for _, each := range csvData {
@@ -148,4 +156,9 @@ func readUploadedFile(filename string) {
 	// fmt.Print(tsvlines[0] + " " + tsvlines[1])
 	// }
 	// jsonData, err := json.Marshal(tsvline)
+}
+
+func sendDataToMongo(s []string, collection string) {
+	fmt.Println(s[1] + " " + s[2] + " " + collection)
+	fmt.Println(len(s))
 }

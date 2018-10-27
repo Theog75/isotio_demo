@@ -25,7 +25,7 @@
 <body>
 	<h1>Uploading file</h1>
   <div>
-  <h2>Files in container</h1>  
+  <h2>Files in container</h1>
   {{ .FilesList }}
   </div>
   <a class='backlink' href="/">back</a>
@@ -52,6 +52,8 @@
   <h1>RedHat ISTIO Demo</h1>
 	<h2>Populate DB</h2>
 	<form method="POST" enctype="multipart/form-data">
+    <label>Mongo Collection</label><br />
+    <input type='text' name='collection' /><br/>
 		<label>File to populate database:</label><br />
 		<input type="file" name="uploadFile"><br />
 		<input type="submit" value="Upload Data">
