@@ -53,7 +53,9 @@
 	<h2>Populate DB</h2>
 	<form method="POST" enctype="multipart/form-data">
     <label>Mongo Collection</label><br />
-    <input type='text' name='collection' /><br/>
+    <select name='collection' />
+      <option value='titles'>Titles DB</option>
+    </select><br/>
 		<label>File to populate database:</label><br />
 		<input type="file" name="uploadFile"><br />
 		<input type="submit" value="Upload Data">

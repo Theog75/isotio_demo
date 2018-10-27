@@ -1,19 +1,23 @@
 version: '3'
 services:
-  # gotest:
-  #   build:
-  #     context: .
-  #     # DOC comment the following line and uncomment the next to run in a different base container
-  #     # dockerfile: DockerfileScratch
-  #     dockerfile: gottestgin/Dockerfile
-  #   ports:
-  #    - "8090:8080"
+  populator:
+    build:
+      context: ./populator
+      dockerfile: Dockerfile
+    # environment:
+    #   - POPULATOR_URL: "populator:8094"
+    ports:
+      - "8094:8088"
+    networks:
+      - backend
   frontend:
     build:
       context: ./frontend
       # DOC comment the following line and uncomment the next to run in a different base container
       # dockerfile: DockerfileScratch
       dockerfile: Dockerfile
+    environment:
+      - POPULATOR_URL=http://populator:8088
     ports:
       - "8092:8088"
     networks:
