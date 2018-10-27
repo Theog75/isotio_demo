@@ -34,7 +34,7 @@ func main() {
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method != http.MethodPost {
 			tmpl.Execute(w, nil)
-			fmt.Println("file upload ok")
+			// fmt.Println("file upload ok")
 			return
 		} else {
 			fmt.Println("method:", r.Method)
@@ -64,8 +64,8 @@ func main() {
 
 			var filedata []string
 
-			filedata = filesList()
-			fmt.Printf("%v", filedata)
+			// filedata = filesList()
+			// fmt.Printf("%v", filedata)
 			dt := Fileupload{
 				Success:   true,
 				FilesList: filedata,
@@ -95,18 +95,18 @@ func main() {
 	http.ListenAndServe(":8088", nil)
 }
 
-func filesList() []string {
-	var fileList []string
-	files, err := ioutil.ReadDir("./")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	for _, f := range files {
-		fileList = append(fileList, f.Name())
-	}
-	return fileList
-}
+// func filesList() []string {
+// 	var fileList []string
+// 	files, err := ioutil.ReadDir("./")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+//
+// 	for _, f := range files {
+// 		fileList = append(fileList, f.Name())
+// 	}
+// 	return fileList
+// }
 
 func readUploadedFile(filename string, collection string) {
 	fmt.Println("Reading file" + filename)
@@ -160,15 +160,21 @@ func readUploadedFile(filename string, collection string) {
 }
 
 func sendDataToMongo(s []string, collection string) {
+	var jsonStr map[string]string
 	url := os.Getenv("POPULATOR_URL") + "/populatetitles"
-	fmt.Println(s[1] + " " + s[2] + " " + collection)
-	fmt.Println(len(s))
+	// fmt.Println(s[1] + " " + s[2] + " " + collection)
+	// fmt.Println(len(s))
 	// url := "http://restapi3.apiary.io/notes"
+	if collection == "titles" {
+		jsonStr = map[string]string{"collection": collection, "titleid": s[0], "ordering": s[1], "title": s[2], "region": s[3], "language": s[4], "types": s[5], "attributes": s[6], "isOriginalTitle": s[7]}
+	} else if collection == "actors" {
+		jsonStr = map[string]string{"titleid": s[0]}
+	}
+	jsonValue, _ := json.Marshal(jsonStr)
 	fmt.Println("URL:>", url)
-
-	var jsonStr = []byte(`{"titleid": s[0],"ordering": s[1],"title": s[2],"region":s[3],"language": s[4],"types": s[4],"attribute": s[5],"isOriginalTitle": s[6]}`)
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
-	req.Header.Set("X-Custom-Header", "myvalue")
+	// var jsonStr = []byte(`{"titleid": ` + s[0] + `,"ordering": ` + s[1] + `,"title": ` + s[2] + `,"region":` + s[3] + `,"language": ` + s[4] + `,"types": ` + s[4] + `,"attribute": ` + s[5] + `,"isOriginalTitle": ` + s[6] + `}`)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
+	// req.Header.Set("X-Custom-Header", "myvalue")
 	req.Header.Set("Content-Type", "application/json")
 
 	client := &http.Client{}
