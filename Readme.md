@@ -2,5 +2,5 @@
 
 ## go environment variables
 
-- set CGO_ENABLED=0
-- GOOS=linux
+- $env:CGO_ENABLED=0
+- $env:GOOS = "linux"

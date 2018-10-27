@@ -4,6 +4,7 @@ package main
 import (
 	"bufio"
 	"encoding/csv"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"io"
@@ -17,6 +18,11 @@ import (
 type Fileupload struct {
 	Success   bool
 	FilesList []string
+}
+
+type Pong struct {
+	Respo string
+	Stat  string
 }
 
 func main() {
@@ -62,6 +68,20 @@ func main() {
 			readUploadedFile(handler.Filename)
 
 		}
+	})
+
+	http.HandleFunc("/ping", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Println("Ping")
+
+		responseforping := Pong{"pong", "ok"}
+		js, err := json.Marshal(responseforping)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		fmt.Println(js)
+		w.Header().Set("Content-Type", "application/json")
+		w.Write(js)
 	})
 
 	http.ListenAndServe(":8088", nil)
