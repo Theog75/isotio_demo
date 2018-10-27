@@ -160,13 +160,13 @@ func readUploadedFile(filename string, collection string) {
 }
 
 func sendDataToMongo(s []string, collection string) {
-	url := os.Getenv("POPULATOR_URL")
+	url := os.Getenv("POPULATOR_URL") + "/populatetitles"
 	fmt.Println(s[1] + " " + s[2] + " " + collection)
 	fmt.Println(len(s))
 	// url := "http://restapi3.apiary.io/notes"
 	fmt.Println("URL:>", url)
 
-	var jsonStr = []byte(`{"title":"Buy cheese and bread for breakfast."}`)
+	var jsonStr = []byte(`{"titleid": s[0],"ordering": s[1],"title": s[2],"region":s[3],"language": s[4],"types": s[4],"attribute": s[5],"isOriginalTitle": s[6]}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Set("X-Custom-Header", "myvalue")
 	req.Header.Set("Content-Type", "application/json")

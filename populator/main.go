@@ -1,77 +1,51 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
 
-type ExampleResp struct {
-	Success bool   `json:"success"`
-	Data    string `json:"data"`
+// Titles struct for titles tsv file json string to mongodb
+type Titles struct {
+	Titleid         string   `json:"titleid" binding:"required"`
+	Ordering        int      `json:"ordering"`
+	Title           string   `json:"title"`
+	Region          string   `json:"region"`
+	Language        string   `json:"language"`
+	Types           []string `json:"types"`
+	Attibutes       []string `json:"attributes"`
+	IsOriginalTitle bool     `json:"isOriginalTitle"`
 }
 
-type User struct {
-	Title string `json:"title"`
-}
+func populatetitlesDB(c *gin.Context) {
+	var titleline Titles
+	c.BindJSON(titleline)
+	fmt.Println("GOT JSON" + titleline.Title)
+	c.JSON(200, gin.H{"status": "200"})
 
-type transformedTodo struct {
-	ID        uint   `json:"id"`
-	Title     string `json:"title"`
-	Completed bool   `json:"completed"`
-}
-
-type controlSignal struct {
-	Signal string `json:"signal"`
-	State  bool   `json:"state"`
-}
-
-// func createTodo(c *gin.Context) {
-// 	fmt.Println("testing")
-// }
-func fetchAllTodo(c *gin.Context) {
-	todo := transformedTodo{ID: 5, Title: "test", Completed: true}
-	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": todo})
-}
-
-func initializeProcess(c *gin.Context) {
-	todo := controlSignal{Signal: "Starting process", State: true}
-	c.JSON(http.StatusOK, gin.H{"status": http.StatusOK, "data": todo})
-}
-
-func populateDB(c *gin.Context) {
-	var u User
-	c.BindJSON(&u)
-	// resp := ExampleResp{
-	// 	Success: true,
-	// 	Data:    "ssdfsd",
+	// session, err := mgo.Dial("langdb:27017")
+	// if err != nil {
+	// 	panic(err)
 	// }
-	// c.JSON(200, u.Title)
-	c.JSON(http.StatusOK, gin.H{
-		"title": u.Title,
-	})
+	// defer session.Close()
+	//
+	// // Optional. Switch the session to a monotonic behavior.
+	// session.SetMode(mgo.Monotonic, true)
+	//
+	// updatemongo := session.DB("peopletest").C("people")
+	// err = updatemongo.Insert(&titles{s)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
 
 }
-
-func drawForm(c *gin.Context) {
-
-}
-
-func fetchSingleTodo(c *gin.Context) {}
-func updateTodo(c *gin.Context)      {}
-func deleteTodo(c *gin.Context)      {}
 
 func main() {
 	router := gin.Default()
 	v1 := router.Group("/")
 	{
-		// v1.POST("/", createTodo)
-		v1.GET("/", fetchAllTodo)
-		v1.GET("/init", initializeProcess)
-		v1.POST("/populate", populateDB)
-		// v1.GET("/:id", fetchSingleTodo)
-		// v1.PUT("/:id", updateTodo)
-		// v1.DELETE("/:id", deleteTodo)
+		v1.POST("/populatetitles", populatetitlesDB)
 	}
 	router.Run(":8088")
 }
