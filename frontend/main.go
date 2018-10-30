@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"html/template"
 	"io"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -171,7 +170,7 @@ func sendDataToMongo(s []string, collection string) {
 		jsonStr = map[string]string{"titleid": s[0]}
 	}
 	jsonValue, _ := json.Marshal(jsonStr)
-	fmt.Println("URL:>", url)
+	// fmt.Println("URL:>", url)
 	// var jsonStr = []byte(`{"titleid": ` + s[0] + `,"ordering": ` + s[1] + `,"title": ` + s[2] + `,"region":` + s[3] + `,"language": ` + s[4] + `,"types": ` + s[4] + `,"attribute": ` + s[5] + `,"isOriginalTitle": ` + s[6] + `}`)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonValue))
 	// req.Header.Set("X-Custom-Header", "myvalue")
@@ -184,8 +183,8 @@ func sendDataToMongo(s []string, collection string) {
 	}
 	defer resp.Body.Close()
 
-	fmt.Println("response Status:", resp.Status)
-	fmt.Println("response Headers:", resp.Header)
-	body, _ := ioutil.ReadAll(resp.Body)
-	fmt.Println("response Body:", string(body))
+	// fmt.Println("response Status:", resp.Status)
+	// fmt.Println("response Headers:", resp.Header)
+	// body, _ := ioutil.ReadAll(resp.Body)
+	// fmt.Println("response Body:", string(body))
 }

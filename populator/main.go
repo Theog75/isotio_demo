@@ -9,6 +9,10 @@ import (
 	mgo "gopkg.in/mgo.v2"
 )
 
+var mgoSession *mgo.Session
+
+// var session *mgo.Session
+
 // Titles struct for titles tsv file json string to mongodb
 type Titles struct {
 	Collection      string `json:"collection"`
@@ -43,24 +47,35 @@ func populatetitlesDB(c *gin.Context) {
 	}
 	c.String(200, fmt.Sprintf("%#v", titleline))
 
-	session, err := mgo.Dial(os.Getenv("MONGO_URL"))
-	if err != nil {
-		panic(err)
-	}
-	defer session.Close()
-
 	// Optional. Switch the session to a monotonic behavior.
-	session.SetMode(mgo.Monotonic, true)
-
-	updatemongo := session.DB(os.Getenv("MONGO_DATABASE")).C(titleline.Collection)
+	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(titleline.Collection)
 	err = updatemongo.Insert(&Titlesmongo{titleline.Titleid, titleline.Ordering, titleline.Title, titleline.Region, titleline.Language, titleline.Types, titleline.Attibutes, titleline.IsOriginalTitle})
 	if err != nil {
+		fmt.Println("Could not update mongo")
 		log.Fatal(err)
 	}
-
 }
 
+func GetMongoSession() *mgo.Session {
+	if mgoSession == nil {
+		var err error
+		mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
+		if err != nil {
+			log.Fatal("Failed to start the Mongo session")
+		}
+	}
+	return mgoSession.Clone()
+}
+
+func init() {
+	mgoSession := GetMongoSession()
+	mgoSession.SetMode(mgo.Monotonic, true)
+}
 func main() {
+
+	// mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
+	defer mgoSession.Close()
+
 	router := gin.Default()
 	v1 := router.Group("/")
 	{

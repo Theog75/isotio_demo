@@ -5,7 +5,7 @@ services:
       context: ./populator
       dockerfile: Dockerfile
     environment:
-      - MONGO_URL=http://langdb:27017
+      - MONGO_URL=langdb:27017
       - MONGO_DATABASE=imdb
     ports:
       - "8088"
@@ -25,7 +25,7 @@ services:
     image: mongo
     restart: always
     ports:
-      - 8084:27017
+      - "27017:27017"
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: redhat
       ME_CONFIG_MONGODB_ADMINPASSWORD: lirancohen
