@@ -53,7 +53,7 @@ func main() {
 
 			defer file.Close()
 			// fmt.Fprintf(w, "%v", handler.Header)
-			f, err := os.OpenFile("./"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0666)
+			f, err := os.OpenFile("/uploads/"+handler.Filename, os.O_WRONLY|os.O_CREATE, 0777)
 			if err != nil {
 				fmt.Println("Error opening file:", handler.Filename, err)
 				return
@@ -109,7 +109,7 @@ func main() {
 
 func readUploadedFile(filename string, collection string) {
 	fmt.Println("Reading file" + filename)
-	file, err := os.Open("/" + filename)
+	file, err := os.Open("/uploads/" + filename)
 
 	if err != nil {
 		log.Fatal(err)
