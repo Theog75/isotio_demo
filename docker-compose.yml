@@ -24,13 +24,14 @@ services:
     networks:
       - backend
   langdb:
-    image: mongo
+    image: centos/mongodb-32-centos7
     restart: always
     ports:
       - "27017:27017"
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=redhat
-      - MONGO_INITDB_ROOT_PASSWORD=lirancohen
+      - MONGODB_USER=redhat
+      - MONGODB_PASSWORD=lirancohen
+      - MONGODB_DATABASE-imdb
     networks:
       - backend
 networks:

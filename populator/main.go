@@ -71,9 +71,9 @@ func populatetitlesDB(c *gin.Context) {
 func GetMongoSession() *mgo.Session {
 	fmt.Println(os.Getenv("MONGO_URL") + " " + os.Getenv("MONGO_DATABASE") + " " + os.Getenv("MONGO_USER") + " " + os.Getenv("MONGO_PASSWORD"))
 	mongoDBDialInfo := &mgo.DialInfo{
-		Addrs:   []string{(os.Getenv("MONGO_URL"))},
-		Timeout: 60 * time.Second,
-		// Database: os.Getenv("MONGO_DATABASE"),
+		Addrs:    []string{(os.Getenv("MONGO_URL"))},
+		Timeout:  60 * time.Second,
+		Database: os.Getenv("MONGO_DATABASE"),
 		Username: os.Getenv("MONGO_USER"),
 		Password: os.Getenv("MONGO_PASSWORD"),
 	}
