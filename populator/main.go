@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	mgo "gopkg.in/mgo.v2"
@@ -56,12 +57,31 @@ func populatetitlesDB(c *gin.Context) {
 	}
 }
 
+// func GetMongoSessionOld() *mgo.Session {
+// 	if mgoSession == nil {
+// 		var err error
+// 		mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
+// 		if err != nil {
+// 			log.Fatal("Failed to start the Mongo session")
+// 		}
+// 	}
+// 	return mgoSession.Clone()
+// }
+// GetMongoSession is an alternative function
 func GetMongoSession() *mgo.Session {
+	fmt.Println(os.Getenv("MONGO_URL") + " " + os.Getenv("MONGO_DATABASE") + " " + os.Getenv("MONGO_USER") + " " + os.Getenv("MONGO_PASSWORD"))
+	mongoDBDialInfo := &mgo.DialInfo{
+		Addrs:   []string{(os.Getenv("MONGO_URL"))},
+		Timeout: 60 * time.Second,
+		// Database: os.Getenv("MONGO_DATABASE"),
+		Username: os.Getenv("MONGO_USER"),
+		Password: os.Getenv("MONGO_PASSWORD"),
+	}
 	if mgoSession == nil {
 		var err error
-		mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
+		mgoSession, err = mgo.DialWithInfo(mongoDBDialInfo)
 		if err != nil {
-			log.Fatal("Failed to start the Mongo session")
+			log.Fatalf("CreateSession: %s\n", err)
 		}
 	}
 	return mgoSession.Clone()
@@ -72,7 +92,7 @@ func init() {
 	mgoSession.SetMode(mgo.Monotonic, true)
 }
 func main() {
-
+	fmt.Println("starting populator V1.0")
 	// mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
 	defer mgoSession.Close()
 

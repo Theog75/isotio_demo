@@ -1,0 +1,12 @@
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: istiodemofrontend
+spec:
+  ports:
+    - name: istiodemofrontend
+      port: 8088
+      targetPort: 8088
+  selector:
+    name: istiodemofrontend
