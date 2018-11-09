@@ -114,7 +114,32 @@
       border-radius: 5px;
       padding: 20px;
       float: left;
-      margin: 10px;
+      clear: left;
+      width: 30%;
+      margin: 7px;
+      background-color: rgba(230,230,230,.6)
+    }
+
+    #searchperson {
+      border: 0 ;
+      border-bottom: 1px solid #999;
+      background-color: transparent;
+      width: 90%;
+    }
+
+    .searcharea {
+      width: 60%;
+      float: right;
+      margin: 20px;
+      min-height: 800px;
+    }
+
+    #searchres {
+      min-height: 500px;
+      float: left;
+      font-size: 25px;
+      width: 90%;
+      border-radius: 0;
     }
   </style>
 </head>
@@ -125,11 +150,18 @@
     </div>
 	<h1>RedHat Istio on Openshift Demo<span class='verion'>{{ .version}}</span></h1>
   <div class='Author'>
-    Writtnen by: <a href='mailto:Liran@rct.co.il'>Liran Cohen</a>
+    Written by: <a href='mailto:Liran@rct.co.il'>Liran Cohen</a>
   </div>
 </div>
 <div id='content'>
+  <div class='searcharea'>
+    <div class='searchline'>
+      <input type='text' name='searchperson' id='searchperson' placeholder="Search Movie or person">
+    </div>
+    <div id='searchres'>
 
+    </div>
+  </div>
   <div class='statbox' id='dbcount'>
     <h2>{{ .TotalTitles }}</h2>
     <span id='totmovies'></span> Movies
@@ -139,8 +171,15 @@
     <h2>{{ .ActorCounter }}</h2>
     <span id='totactors'></span> Crew
   </div>
+  <div class='statbox' id='countcategories'>
+    <h2>{{ .CategoryCount }}</h2>
+    <span id='personcategory'></span>
+  </div>
+
+
 
 </div>
+
 
 <div class='footer'>
   <div class='logosb'>
@@ -191,6 +230,21 @@ function dbcount() {
           console.log("Error");
         }
       });
+
+      var request = $.ajax({
+        url: "/personcategory",
+        type: "POST",
+        data: {action:"personcategory"},
+        success: function(ddt, textStatus, jqXHR)
+          {
+          $("#personcategory").html(ddt);
+          return false;
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+            console.log("Error");
+          }
+        });
   }
 </script>
 </body>

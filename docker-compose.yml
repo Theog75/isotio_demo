@@ -1,5 +1,18 @@
 version: '3'
 services:
+  personcategory:
+    build:
+      context: ./personcategory
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=langdb:27017
+      - MONGO_DATABASE=imdb
+      - MONGO_USER=redhat
+      - MONGO_PASSWORD=lirancohen
+    ports:
+      - "8099:8099"
+    networks:
+      - backend
   actorcount:
     build:
       context: ./actorcount
@@ -56,6 +69,7 @@ services:
     environment:
           - DBCOUNTER_URL=http://dbcounter:8097
           - ACTORCOUNTER_URL=http://actorcount:8098
+          - PERSONCATEGORY_URL=http://personcategory:8099
     ports:
       - "8095:8080"
     networks:
