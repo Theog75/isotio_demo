@@ -1,0 +1,110 @@
+<html>
+<head>
+  <title>{{ .title }}</title>
+  <style>
+    body {
+      text-align: center;
+      background-image: url(./img/bg.png);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      min-height: 800px;
+    }
+    input {
+      margin: 10px;
+      border: 1px solid #acacac;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+    .header {
+      background: rgba(0,0,0,.8);
+      color: #fff;
+      width: 100%;
+      padding: 10px;
+      height: 75px;
+    }
+
+    .header h1 {
+      width: 400px;
+      float: left;
+      margin-left: 20px;
+    }
+
+    .logo {
+      float: left;
+      margin: 10px 30px;
+    }
+
+    .Author {
+      float: right;
+      padding: 20px;
+    }
+
+    .Author a {color: #fff;}
+
+    .verion {
+      font-size: 12px;
+      color: #bbb;
+      padding-left: 20px;
+    }
+
+    .footer {
+      height: 200px;
+      width: 100%;
+      clear: both;
+      background-color: #252525;
+      position: relative;
+    }
+
+    .redblock {
+      padding: 30px;
+      font-size: 25px;
+      line-height: 40px;
+      position: absolute;
+      width: 360px;
+      height: 200px;
+      background-color: #c00;
+      color: #fff;
+      right: 20px;
+      bottom: 0;
+      /* margin-top: -20px; */
+    }
+    .redblock a {
+      color: #fff;
+    }
+    #content {
+      min-height: 600px;
+      clear: both;
+      width: 100$;
+    }
+  </style>
+</head>
+<body>
+  <div  class='header'>
+    <div class='logo'>
+      <img src='./img/logo.png' />
+    </div>
+	<h1>RedHat Istio Demo<span class='verion'>{{ .version}}</span></h1>
+  <div class='Author'>
+    Writtnen by: <a href='mailto:Liran@rct.co.il'>Liran Cohen</a>
+  </div>
+</div>
+<div id='content'>
+
+</div>
+
+<div class='footer'>
+
+<div class='redblock'>
+Presentation by:<br/>
+<a href='https://www.linkedin.com/in/orgadkimchi/'>Orgad Kimchi</a>
+&
+<a href='https://www.linkedin.com/in/lirancohen/'>Liran Cohen</a>
+
+</div>
+</div>
+
+</body>
+</html>
