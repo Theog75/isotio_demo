@@ -1,5 +1,6 @@
 <html>
 <head>
+  <script src="./img/jquery-3.3.1.min.js"></script>
   <title>{{ .title }}</title>
   <style>
     body {
@@ -9,7 +10,7 @@
       margin: 0;
       padding: 0;
       text-align: center;
-      min-height: 800px;
+      min-height: 600px;
     }
     input {
       margin: 10px;
@@ -27,7 +28,7 @@
     }
 
     .header h1 {
-      width: 400px;
+      width: 500px;
       float: left;
       margin-left: 20px;
     }
@@ -57,7 +58,11 @@
       background-color: #252525;
       position: relative;
     }
-
+    .footer img {
+      height: 40px;
+      float: left;
+      margin: 20px;
+    }
     .redblock {
       padding: 30px;
       font-size: 25px;
@@ -79,6 +84,27 @@
       clear: both;
       width: 100$;
     }
+    .redhatcreds {
+      width: 100%;
+      clear: both;
+      text-align: center;
+      color: #fff;
+      position: absolute;
+      bottom: 0;
+    }
+
+    .redhatcreds a {
+      color: #fff;
+    }
+
+    .logosb {
+      background-color: #fff;
+      border-radius: 5px;
+      margin: 20px;
+      width: 300px;
+      float: left;
+      text-align: cemter;
+    }
   </style>
 </head>
 <body>
@@ -86,15 +112,16 @@
     <div class='logo'>
       <img src='./img/logo.png' />
     </div>
-	<h1>RedHat Istio Demo<span class='verion'>{{ .version}}</span></h1>
+	<h1>RedHat Istio on Openshift Demo<span class='verion'>{{ .version}}</span></h1>
   <div class='Author'>
     Writtnen by: <a href='mailto:Liran@rct.co.il'>Liran Cohen</a>
   </div>
 </div>
 <div id='content'>
 
-  <div class='statbox'>
-
+  <div class='statbox' id='dbcount'>
+    <h2>{{ .TotalTitles }}</h2>
+    {{ .TotalTitlesContent }}
   </div>
 
 
@@ -104,7 +131,11 @@
 </div>
 
 <div class='footer'>
-<a class='redhatcreds'>Red</a>
+  <div class='logosb'>
+  <img src='./img/openshift.png'>
+  <img src='./img/istioio.png'>
+</div>
+<a class='redhatcreds' href='http://www.resdhat.com'>RedHat</a>
 <div class='redblock'>
 Presentation by:<br/>
 <a href='https://www.linkedin.com/in/orgadkimchi/'>Orgad Kimchi</a>
@@ -113,6 +144,25 @@ Presentation by:<br/>
 
 </div>
 </div>
+<script type='text/javascript'>
+setTimeout(dbcount, 5000);
 
+function dbcount() {
+  var request = $.ajax({
+    url: "/dbcount",
+    type: "POST",
+    data: {action:"dbcount"},
+    success: function(ddt, textStatus, jqXHR)
+      {
+      $("#dbcount").html(ddt);
+      return false;
+      },
+      error: function (jqXHR, textStatus, errorThrown)
+      {
+        console.log("Error");
+      }
+    });
+  }
+</script>
 </body>
 </html>

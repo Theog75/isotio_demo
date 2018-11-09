@@ -16,8 +16,12 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "fe1.tmpl", gin.H{
 			"title":   "RedHat Istio Demo",
-			"version": "1.0.16",
+			"version": "1.0.17",
 		})
+	})
+
+	router.GET("/dbcount", func(c *gin.Context) {
+
 	})
 	router.Run(":8080")
 }
