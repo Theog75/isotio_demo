@@ -38,6 +38,82 @@ type Titlesmongo struct {
 	IsOriginalTitle string
 }
 
+type Crew struct {
+	Collection string `json:"collection"`
+	Titleid    string `json:"tconst" binding:"required"`
+	Ordering   string `json:"ordering"`
+	Nconst     string `json:"nconst"`
+	Category   string `json:"category"`
+	Job        string `json:"job"`
+	Characters string `json:"carachters"`
+}
+
+type Crewmongo struct {
+	Titleid    string
+	Ordering   string
+	Nconst     string
+	Category   string
+	Job        string
+	Characters string
+}
+
+type Names struct {
+	Collection        string `json:"collection"`
+	Titleid           string `json:"nconst" binding:"required"`
+	PrimaryName       string `json:"primaryName"`
+	BirthYear         string `json:"birthYear"`
+	DeathYear         string `json:"deathYear"`
+	PrimaryProfession string `json:"primaryProfession"`
+	KnownForTitles    string `json:"knownForTitles"`
+}
+
+type Namesmongo struct {
+	Titleid           string
+	PrimaryName       string
+	BirthYear         string
+	DeathYear         string
+	PrimaryProfession string
+	KnownForTitles    string
+}
+
+func populatenamesDB(c *gin.Context) {
+	nameline := new(Names)
+	err := c.BindJSON(&nameline)
+	if err != nil {
+		fmt.Println("Main Error", err)
+		c.AbortWithError(400, err)
+		return
+	}
+	c.String(200, fmt.Sprintf("%#v", nameline))
+
+	// Optional. Switch the session to a monotonic behavior.
+	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(nameline.Collection)
+	err = updatemongo.Insert(&Crewmongo{nameline.Titleid, nameline.PrimaryName, nameline.BirthYear, nameline.DeathYear, nameline.PrimaryProfession, nameline.KnownForTitles})
+	if err != nil {
+		fmt.Println("Could not update mongo")
+		log.Fatal(err)
+	}
+}
+
+func populatecrewsDB(c *gin.Context) {
+	crewline := new(Crew)
+	err := c.BindJSON(&crewline)
+	if err != nil {
+		fmt.Println("Main Error", err)
+		c.AbortWithError(400, err)
+		return
+	}
+	c.String(200, fmt.Sprintf("%#v", crewline))
+
+	// Optional. Switch the session to a monotonic behavior.
+	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(crewline.Collection)
+	err = updatemongo.Insert(&Crewmongo{crewline.Titleid, crewline.Ordering, crewline.Nconst, crewline.Category, crewline.Job, crewline.Characters})
+	if err != nil {
+		fmt.Println("Could not update mongo")
+		log.Fatal(err)
+	}
+}
+
 func populatetitlesDB(c *gin.Context) {
 	titleline := new(Titles)
 	err := c.BindJSON(&titleline)
@@ -97,9 +173,18 @@ func main() {
 	defer mgoSession.Close()
 
 	router := gin.Default()
-	v1 := router.Group("/")
+	v1 := router.Group("/populatetitles")
 	{
-		v1.POST("/populatetitles", populatetitlesDB)
+		v1.POST("/", populatetitlesDB)
 	}
+	v2 := router.Group("/populatecrews")
+	{
+		v2.POST("/", populatecrewsDB)
+	}
+	v3 := router.Group("/populatenames")
+	{
+		v3.POST("/", populatenamesDB)
+	}
+
 	router.Run(":8088")
 }

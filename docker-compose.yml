@@ -1,50 +1,77 @@
 version: '3'
 services:
-  # populator:
-  #   build:
-  #     context: ./populator
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - MONGO_URL=langdb:27017
-  #     - MONGO_DATABASE=imdb
-  #     - MONGO_USER=redhat
-  #     - MONGO_PASSWORD=lirancohen
-  #   ports:
-  #     - "8088"
-  #   networks:
-  #     - backend
-  # frontend:
-  #   build:
-  #     context: ./frontend
-  #     dockerfile: Dockerfile
-  #   environment:
-  #     - POPULATOR_URL=http://populator:8088
-  #   ports:
-  #     - "8092:8088"
-  #   networks:
-  #     - backend
+  actorcount:
+    build:
+      context: ./actorcount
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=langdb:27017
+      - MONGO_DATABASE=imdb
+      - MONGO_USER=redhat
+      - MONGO_PASSWORD=lirancohen
+    ports:
+      - "8098:8098"
+    networks:
+      - backend
+  dbcounter:
+    build:
+      context: ./dbcounter
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=langdb:27017
+      - MONGO_DATABASE=imdb
+      - MONGO_USER=redhat
+      - MONGO_PASSWORD=lirancohen
+    ports:
+      - "8097:8097"
+    networks:
+      - backend
+  populator:
+    build:
+      context: ./populator
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=langdb:27017
+      - MONGO_DATABASE=imdb
+      - MONGO_USER=redhat
+      - MONGO_PASSWORD=lirancohen
+    ports:
+      - "8088"
+    networks:
+      - backend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      - POPULATOR_URL=http://populator:8088
+    ports:
+      - "8092:8088"
+    networks:
+      - backend
   userfrontend:
     build:
       context: ./userfrontend
       dockerfile: Dockerfile
     environment:
-      - POPULATOR_URL=http://populator:8088
+          - DBCOUNTER_URL=http://dbcounter:8097
+          - ACTORCOUNTER_URL=http://actorcount:8098
     ports:
       - "8095:8080"
     networks:
       - backend
-#   langdb:
-#     image: centos/mongodb-32-centos7
-#     restart: always
-#     ports:
-#       - "27017:27017"
-#     environment:
-#       - MONGODB_ADMIN_PASSWORD=lirancohen
-#       - MONGODB_USER=redhat
-#       - MONGODB_PASSWORD=lirancohen
-#       - MONGODB_DATABASE=imdb
-#     networks:
-#       - backend
+  langdb:
+    image: centos/mongodb-32-centos7
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ADMIN_PASSWORD=lirancohen
+      - MONGODB_USER=redhat
+      - MONGODB_PASSWORD=lirancohen
+      - MONGODB_DATABASE=imdb
+    networks:
+      - backend
 networks:
   backend:
     driver: bridge

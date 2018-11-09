@@ -160,14 +160,28 @@ func readUploadedFile(filename string, collection string) {
 
 func sendDataToMongo(s []string, collection string) {
 	var jsonStr map[string]string
-	url := os.Getenv("POPULATOR_URL") + "/populatetitles"
+	var uri string
+	if collection == "titles" {
+		uri = "/populatetitles"
+	} else if collection == "actors" {
+		uri = "/populatecrews"
+	} else if collection == "names" {
+		uri = "/populatenames"
+	} else {
+		panic("Unknown collection")
+	}
+	url := os.Getenv("POPULATOR_URL") + uri
 	// fmt.Println(s[1] + " " + s[2] + " " + collection)
 	// fmt.Println(len(s))
 	// url := "http://restapi3.apiary.io/notes"
 	if collection == "titles" {
 		jsonStr = map[string]string{"collection": collection, "titleid": s[0], "ordering": s[1], "title": s[2], "region": s[3], "language": s[4], "types": s[5], "attributes": s[6], "isOriginalTitle": s[7]}
 	} else if collection == "actors" {
-		jsonStr = map[string]string{"titleid": s[0]}
+		jsonStr = map[string]string{"collection": collection, "titleid": s[0], "ordering": s[1], "nconst": s[2], "category": s[3], "job": s[4], "carachters": s[5]}
+	} else if collection == "names" {
+		jsonStr = map[string]string{"collection": collection, "nconst": s[0], "primaryName": s[1], "birthYear": s[2], "deathYear": s[3], "primaryProfession": s[4], "knownForTitles": s[5]}
+	} else {
+		panic("NO Collection selected")
 	}
 	jsonValue, _ := json.Marshal(jsonStr)
 	// fmt.Println("URL:>", url)

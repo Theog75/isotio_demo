@@ -105,6 +105,17 @@
       float: left;
       text-align: cemter;
     }
+
+
+
+    .statbox {
+      border: 1px solid #acacac;
+      color: #999;
+      border-radius: 5px;
+      padding: 20px;
+      float: left;
+      margin: 10px;
+    }
   </style>
 </head>
 <body>
@@ -121,12 +132,13 @@
 
   <div class='statbox' id='dbcount'>
     <h2>{{ .TotalTitles }}</h2>
-    {{ .TotalTitlesContent }}
+    <span id='totmovies'></span> Movies
   </div>
 
-
-
-
+  <div class='statbox' id='countactors'>
+    <h2>{{ .ActorCounter }}</h2>
+    <span id='totactors'></span> Crew
+  </div>
 
 </div>
 
@@ -145,16 +157,17 @@ Presentation by:<br/>
 </div>
 </div>
 <script type='text/javascript'>
-setTimeout(dbcount, 5000);
+setInterval(dbcount, 1000);
 
 function dbcount() {
+  // $("#totmovies").html("---");
   var request = $.ajax({
     url: "/dbcount",
     type: "POST",
     data: {action:"dbcount"},
     success: function(ddt, textStatus, jqXHR)
       {
-      $("#dbcount").html(ddt);
+      $("#totmovies").html(ddt);
       return false;
       },
       error: function (jqXHR, textStatus, errorThrown)
@@ -162,6 +175,22 @@ function dbcount() {
         console.log("Error");
       }
     });
+
+    // $("#totactors").html("---");
+    var request = $.ajax({
+      url: "/actorcount",
+      type: "POST",
+      data: {action:"actorcount"},
+      success: function(ddt, textStatus, jqXHR)
+        {
+        $("#totactors").html(ddt);
+        return false;
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+          console.log("Error");
+        }
+      });
   }
 </script>
 </body>
