@@ -1,0 +1,84 @@
+<!-- forms.html -->
+{{if .Success}}
+<html>
+<head>
+  <title>RedHat Forum Istio Demo - User Interface</title>
+  <style>
+    body {
+      text-align: center;
+      background=image: url(bg.png);
+      color: #fff;
+    }
+    input {
+      margin: 10px;
+      border: 1px solid #acacac;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+
+    .backlink {
+      disaply: block;
+      margin: 10px auto;
+      clear: both;
+    }
+
+    .header {
+      background:rgba(0,0,0,.8);
+      color: #fff;
+    }
+
+    .logo {
+      float: left;
+      margin: 10px 30px;
+    }
+  </style>
+</head>
+<body>
+  <div  class='header'>
+    <div class='logo'>
+      <img src='logo.png' />
+    </div>
+	<h1>RedHat IstioDemo</h1>
+</div>
+  <div>
+  <h2>Files in container</h1>
+  {{ .FilesList }}
+  </div>
+  <a class='backlink' href="/">back</a>
+</body>
+</html>
+{{else}}
+<html>
+<head>
+  <title>RedHat Forum Istio Demo</title>
+  <style>
+    body {
+      text-align: center;
+    }
+    input {
+      margin: 10px;
+      border: 1px solid #acacac;
+      background-color: #eee;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>RedHat ISTIO Demo</h1>
+	<h2>Populate DB</h2>
+	<form method="POST" enctype="multipart/form-data">
+    <label>Mongo Collection</label><br />
+    <select name='collection' />
+      <option value='titles'>Titles DB</option>
+      <option value='actors'>Actors</option>
+      </option>
+    </select><br/>
+		<label>File to populate database:</label><br />
+		<input type="file" name="uploadFile"><br />
+		<input type="submit" value="Upload Data">
+	</form>
+</body>
+</html>
+{{end}}
