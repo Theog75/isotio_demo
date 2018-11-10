@@ -4,6 +4,7 @@ package main
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -21,6 +22,14 @@ type Professions struct {
 	Directors int `json:"directors"`
 	Actors    int `json:"actors"`
 	Actresses int `json:"actresses"`
+}
+
+type Person struct {
+	Nconst         string `json:"Nconst"`
+	PrimaryName    string `json:"PrimaryName"`
+	BirthYear      string `json:"BirthYear"`
+	DeathYear      string `json:"DeathYear"`
+	KnownForTitles string `json:"KnownForTitles"`
 }
 
 func main() {
@@ -97,6 +106,39 @@ func main() {
 		}
 		// fmt.Println(dta.Directors)
 		c.String(200, "<div class='proflien'>Actors: "+strconv.Itoa(dta.Actors)+"</div>"+"<div class='proflien'>Actresses: "+strconv.Itoa(dta.Actresses)+"</div>"+"<div class='proflien'>Directors: "+strconv.Itoa(dta.Directors)+"</div>")
+	})
+
+	router.POST("/searchperson", func(c *gin.Context) {
+		searchstring := c.PostForm("searchstring")
+		jsonStr := []byte(`{"searchstring": "` + searchstring + `"}`)
+		url := os.Getenv("SEARCHPERSON_URL")
+		// jsonValue, _ := json.Marshal(jsonStr)
+		req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+		// req.Header.Set("X-Custom-Header", "myvalue")
+		req.Header.Set("Content-Type", "application/json")
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			panic(err)
+		}
+		defer resp.Body.Close()
+		body, _ := ioutil.ReadAll(resp.Body)
+		var dta []Person
+
+		v := json.Unmarshal([]byte(body), &dta)
+		if v != nil {
+			panic(v)
+		}
+		// fmt.Println("printing responses....")
+		// fmt.Println(string(body))
+		var searchResp string
+		for _, pps := range dta {
+			fmt.Println("Got Actor Name: " + pps.PrimaryName)
+			searchResp = searchResp + "<div class='sres' id='" + pps.Nconst + "'>" + pps.PrimaryName + "</div>"
+			// fmt.Printf("%v", pps)
+		}
+		c.String(200, searchResp)
 	})
 
 	router.Run(":8080")

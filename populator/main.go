@@ -59,7 +59,7 @@ type Crewmongo struct {
 
 type Names struct {
 	Collection        string `json:"collection"`
-	Titleid           string `json:"nconst" binding:"required"`
+	Nconst            string `json:"nconst" binding:"required"`
 	PrimaryName       string `json:"primaryName"`
 	BirthYear         string `json:"birthYear"`
 	DeathYear         string `json:"deathYear"`
@@ -68,7 +68,7 @@ type Names struct {
 }
 
 type Namesmongo struct {
-	Titleid           string
+	Nconst            string
 	PrimaryName       string
 	BirthYear         string
 	DeathYear         string
@@ -88,7 +88,7 @@ func populatenamesDB(c *gin.Context) {
 
 	// Optional. Switch the session to a monotonic behavior.
 	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(nameline.Collection)
-	err = updatemongo.Insert(&Crewmongo{nameline.Titleid, nameline.PrimaryName, nameline.BirthYear, nameline.DeathYear, nameline.PrimaryProfession, nameline.KnownForTitles})
+	err = updatemongo.Insert(&Namesmongo{nameline.Nconst, nameline.PrimaryName, nameline.BirthYear, nameline.DeathYear, nameline.PrimaryProfession, nameline.KnownForTitles})
 	if err != nil {
 		fmt.Println("Could not update mongo")
 		log.Fatal(err)

@@ -1,5 +1,18 @@
 version: '3'
 services:
+  searchperson:
+    build:
+      context: ./searchperson
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=langdb:27017
+      - MONGO_DATABASE=imdb
+      - MONGO_USER=redhat
+      - MONGO_PASSWORD=lirancohen
+    ports:
+      - "8100:8100"
+    networks:
+      - backend
   personcategory:
     build:
       context: ./personcategory
@@ -70,6 +83,7 @@ services:
           - DBCOUNTER_URL=http://dbcounter:8097
           - ACTORCOUNTER_URL=http://actorcount:8098
           - PERSONCATEGORY_URL=http://personcategory:8099
+          - SEARCHPERSON_URL=http://searchperson:8100
     ports:
       - "8095:8080"
     networks:
