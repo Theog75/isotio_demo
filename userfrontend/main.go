@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -30,6 +31,17 @@ type Person struct {
 	BirthYear      string `json:"BirthYear"`
 	DeathYear      string `json:"DeathYear"`
 	KnownForTitles string `json:"KnownForTitles"`
+}
+
+type Movie struct {
+	Titleid         string `json:"titleid" binding:"required"`
+	Ordering        string `json:"ordering"`
+	Title           string `json:"title"`
+	Region          string `json:"region"`
+	Language        string `json:"language"`
+	Types           string `json:"types"`
+	Attibutes       string `json:"attributes"`
+	IsOriginalTitle string `json:"isOriginalTitle"`
 }
 
 func main() {
@@ -134,12 +146,53 @@ func main() {
 		// fmt.Println(string(body))
 		var searchResp string
 		for _, pps := range dta {
+			movs := getMovies(pps.KnownForTitles)
 			fmt.Println("Got Actor Name: " + pps.PrimaryName)
-			searchResp = searchResp + "<div class='sres' id='" + pps.Nconst + "'>" + pps.PrimaryName + "</div>"
+			searchResp = searchResp + "<div class='sres' id='" + pps.Nconst + "'>" + pps.PrimaryName + " (" + pps.BirthYear + "-" + pps.DeathYear + ")" + movs + "</div>"
 			// fmt.Printf("%v", pps)
 		}
 		c.String(200, searchResp)
 	})
 
 	router.Run(":8080")
+}
+
+func getMovies(titles string) string {
+	var htmlvalue string
+	var tlist []string
+	tlist = strings.Split(titles, ",")
+	var moviestring string
+	htmlvalue = "<div class='movielist'>"
+	for _, tl := range tlist {
+		moviestring = fetchMovieData(tl)
+		htmlvalue += moviestring + " "
+	}
+	htmlvalue += "</div>"
+	return htmlvalue
+}
+
+func fetchMovieData(titleid string) string {
+	var moviestring string
+	jsonStr := []byte(`{"searchstring": "` + titleid + `"}`)
+	url := os.Getenv("MOVIERETRIEVER_URL")
+	// jsonValue, _ := json.Marshal(jsonStr)
+	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	// req.Header.Set("X-Custom-Header", "myvalue")
+	req.Header.Set("Content-Type", "application/json")
+
+	client := &http.Client{}
+	resp, err := client.Do(req)
+	if err != nil {
+		panic(err)
+	}
+	defer resp.Body.Close()
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	var dta Movie
+
+	v := json.Unmarshal([]byte(body), &dta)
+	if v != nil {
+		panic(v)
+	}
+	return moviestring
 }

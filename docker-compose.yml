@@ -1,5 +1,18 @@
 version: '3'
 services:
+  moviertriever:
+    build:
+      context: ./moviertriever
+      dockerfile: Dockerfile
+    environment:
+      - MONGO_URL=langdb:27017
+      - MONGO_DATABASE=imdb
+      - MONGO_USER=redhat
+      - MONGO_PASSWORD=lirancohen
+    ports:
+      - "8101:8101"
+    networks:
+      - backend
   searchperson:
     build:
       context: ./searchperson
@@ -84,6 +97,7 @@ services:
           - ACTORCOUNTER_URL=http://actorcount:8098
           - PERSONCATEGORY_URL=http://personcategory:8099
           - SEARCHPERSON_URL=http://searchperson:8100
+          - MOVIERETRIEVER_URL=http://moviertriever:8101
     ports:
       - "8095:8080"
     networks:

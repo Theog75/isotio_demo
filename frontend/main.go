@@ -180,6 +180,9 @@ func sendDataToMongo(s []string, collection string) {
 		jsonStr = map[string]string{"collection": collection, "titleid": s[0], "ordering": s[1], "nconst": s[2], "category": s[3], "job": s[4], "carachters": s[5]}
 	} else if collection == "names" {
 		jsonStr = map[string]string{"collection": collection, "nconst": s[0], "primaryName": s[1], "birthYear": s[2], "deathYear": s[3], "primaryProfession": s[4], "knownForTitles": s[5]}
+		if s[4] == "Calista Flockhart" {
+			fmt.Println("DUP!!! " + s[4])
+		}
 	} else {
 		panic("NO Collection selected")
 	}

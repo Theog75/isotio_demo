@@ -86,6 +86,7 @@ func populatenamesDB(c *gin.Context) {
 	}
 	c.String(200, fmt.Sprintf("%#v", nameline))
 
+	fmt.Println("Collection: " + nameline.Collection)
 	// Optional. Switch the session to a monotonic behavior.
 	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(nameline.Collection)
 	err = updatemongo.Insert(&Namesmongo{nameline.Nconst, nameline.PrimaryName, nameline.BirthYear, nameline.DeathYear, nameline.PrimaryProfession, nameline.KnownForTitles})
@@ -171,7 +172,7 @@ func main() {
 	fmt.Println("starting populator V1.0")
 	// mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
 	defer mgoSession.Close()
-
+	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	v1 := router.Group("/populatetitles")
 	{

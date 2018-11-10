@@ -57,12 +57,12 @@
       clear: both;
       background-color: #252525;
       position: relative;
+      margin-top: 50px;
     }
     .footer img {
       height: 40px;
       float: left;
       margin: 20px;
-      margin-top: 100px;
     }
     .redblock {
       padding: 30px;
@@ -108,18 +108,20 @@
     }
 
 
-
+    .statbox h2 {
+      color: #c00
+    }
     .statbox {
       border: 1px solid #acacac;
-      color: #c00;
-      border-radius: 5px;
+      color: #000;
       padding: 20px;
       float: left;
       clear: left;
       width: 30%;
       margin: 7px;
       font-size: 20px;
-      background-color: rgba(230,230,230,.6)
+      background-color: rgba(255,255,255,.8);
+      box-shadow: 0 3px 6px rgba(0,0,0,.16), 0 3px 6px rgba(0,0,0,.23);
     }
 
     #searchperson {
@@ -150,10 +152,18 @@
 
     .sres {
       color: #777;
-      font-size: 18px;
+      font-size: 20px;
       text-align: left;
       margin: 10px;
       cursor: pointer;
+    }
+
+    .movielist {
+      display: none;
+      font-size: 18px;
+      color: #fff;
+      background-color: #00394f;
+      padding: 10px;
     }
   </style>
 </head>
@@ -210,10 +220,12 @@ Presentation by:<br/>
 </div>
 </div>
 <script type='text/javascript'>
-
+$("#searchres").on("click",".sres",function() {
+  $("#"+this.id+" > .movielist").toggle();
+})
 $("#searchperson").keyup(function(){
   var searchstring=$("#searchperson").val();
-  if (searchstring.length>1) {
+  if (searchstring.length>4) {
     var request = $.ajax({
       url: "/searchperson",
       type: "POST",
@@ -233,7 +245,7 @@ $("#searchperson").keyup(function(){
   }
 });
 
-setInterval(dbcount, 5000);
+setInterval(dbcount, 1000);
 
 function dbcount() {
   // $("#totmovies").html("---");

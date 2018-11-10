@@ -65,7 +65,7 @@ func readUploadedFile(filename string, collection string) {
 
 	for scanner.Scan() {
 		s := strings.Split(scanner.Text(), "\t")
-		fmt.Println("Sending Json: " + scanner.Text())
+		fmt.Println(collection + "Sending Json: " + scanner.Text())
 		sendDataToMongo(s, collection)
 	}
 
@@ -95,6 +95,7 @@ func sendDataToMongo(s []string, collection string) {
 	// fmt.Println(s[1] + " " + s[2] + " " + collection)
 	// fmt.Println(len(s))
 	// url := "http://restapi3.apiary.io/notes"
+	// fmt.Println("choose collection: " + collection + " " + url)
 	if collection == "titles" {
 		jsonStr = map[string]string{"collection": collection, "titleid": s[0], "ordering": s[1], "title": s[2], "region": s[3], "language": s[4], "types": s[5], "attributes": s[6], "isOriginalTitle": s[7]}
 	} else if collection == "actors" {
