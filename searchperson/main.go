@@ -43,7 +43,7 @@ func dbcount(c *gin.Context) {
 	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C("names")
 	// gamesWon, err := updatemongo.Find(bson.M{}).Count()
 
-	updatemongo.Find(bson.M{"primaryname": bson.M{"$regex": bson.RegEx{regexpattern, ""}}}).All(&people)
+	updatemongo.Find(bson.M{"primaryname": bson.M{"$regex": bson.RegEx{regexpattern, ""}}}).Limit(10).All(&people)
 	// err := updatemongo.Find(bson.M{"primaryName": bson.M{"$regex": bson.RegEx{Pattern: `/dav/`}}}).All(&people)
 	// searchres, err := updatemongo.Find().Limit(100).All()
 	if err != nil {

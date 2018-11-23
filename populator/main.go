@@ -86,13 +86,15 @@ func populatenamesDB(c *gin.Context) {
 	}
 	c.String(200, fmt.Sprintf("%#v", nameline))
 
-	fmt.Println("Collection: " + nameline.Collection)
+	// fmt.Println("Collection: " + nameline.Collection)
 	// Optional. Switch the session to a monotonic behavior.
 	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(nameline.Collection)
 	err = updatemongo.Insert(&Namesmongo{nameline.Nconst, nameline.PrimaryName, nameline.BirthYear, nameline.DeathYear, nameline.PrimaryProfession, nameline.KnownForTitles})
 	if err != nil {
-		fmt.Println("Could not update mongo")
-		log.Fatal(err)
+		fmt.Println("Could not update  mongo collection names " + nameline.Collection)
+		// log.Fatal(err)
+	} else {
+		fmt.Println("Updated: " + nameline.PrimaryName)
 	}
 }
 
@@ -110,8 +112,10 @@ func populatecrewsDB(c *gin.Context) {
 	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(crewline.Collection)
 	err = updatemongo.Insert(&Crewmongo{crewline.Titleid, crewline.Ordering, crewline.Nconst, crewline.Category, crewline.Job, crewline.Characters})
 	if err != nil {
-		fmt.Println("Could not update mongo")
-		log.Fatal(err)
+		fmt.Println("Could not update mongo collection actors: " + crewline.Collection)
+		// log.Fatal(err)
+	} else {
+		fmt.Println("Updated: " + crewline.Titleid)
 	}
 }
 
@@ -129,8 +133,10 @@ func populatetitlesDB(c *gin.Context) {
 	updatemongo := mgoSession.DB(os.Getenv("MONGO_DATABASE")).C(titleline.Collection)
 	err = updatemongo.Insert(&Titlesmongo{titleline.Titleid, titleline.Ordering, titleline.Title, titleline.Region, titleline.Language, titleline.Types, titleline.Attibutes, titleline.IsOriginalTitle})
 	if err != nil {
-		fmt.Println("Could not update mongo")
-		log.Fatal(err)
+		fmt.Println("Could not update mongo mongo collection titles: " + titleline.Collection)
+		// log.Fatal(err)
+	} else {
+		fmt.Println("Updated: " + titleline.Title)
 	}
 }
 
@@ -169,11 +175,12 @@ func init() {
 	mgoSession.SetMode(mgo.Monotonic, true)
 }
 func main() {
-	fmt.Println("starting populator V1.0")
+	fmt.Println("starting populator V1.1.2")
 	// mgoSession, err = mgo.Dial(os.Getenv("MONGO_URL"))
 	defer mgoSession.Close()
 	gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
+	fmt.Println()
 	v1 := router.Group("/populatetitles")
 	{
 		v1.POST("/", populatetitlesDB)

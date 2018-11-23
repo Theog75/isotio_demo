@@ -88,9 +88,9 @@ services:
       - "8092:8088"
     networks:
       - backend
-  userfrontend:
+  userfrontend1017:
     build:
-      context: ./userfrontend
+      context: ./userfrontend1.0.17
       dockerfile: Dockerfile
     environment:
           - DBCOUNTER_URL=http://dbcounter:8097
@@ -114,6 +114,50 @@ services:
       - MONGODB_DATABASE=imdb
     networks:
       - backend
+
+  userfrontend1018:
+    build:
+      context: ./userfrontend1.0.18
+      dockerfile: Dockerfile
+    environment:
+          - DBCOUNTER_URL=http://dbcounter:8097
+          - ACTORCOUNTER_URL=http://actorcount:8098
+          - PERSONCATEGORY_URL=http://personcategory:8099
+          - SEARCHPERSON_URL=http://searchperson:8100
+          - MOVIERETRIEVER_URL=http://moviertriever:8101
+    ports:
+      - "8050:8080"
+    networks:
+      - backend
+
+  userfrontend1019:
+    build:
+      context: ./userfrontend1.0.19
+      dockerfile: Dockerfile
+    environment:
+          - DBCOUNTER_URL=http://dbcounter:8097
+          - ACTORCOUNTER_URL=http://actorcount:8098
+          - PERSONCATEGORY_URL=http://personcategory:8099
+          - SEARCHPERSON_URL=http://searchperson:8100
+          - MOVIERETRIEVER_URL=http://moviertriever:8101
+    ports:
+      - "8051:8080"
+    networks:
+      - backend
+
+  langdb:
+    image: centos/mongodb-32-centos7
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_ADMIN_PASSWORD=lirancohen
+      - MONGODB_USER=redhat
+      - MONGODB_PASSWORD=lirancohen
+      - MONGODB_DATABASE=imdb
+    networks:
+      - backend
+
 networks:
   backend:
     driver: bridge
